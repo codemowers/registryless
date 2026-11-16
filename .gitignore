@@ -1,0 +1,5 @@
+/registryless
+/.build/
+/skaffold.env
+/scripts/promote-images.sh
+/chart/values.*.yaml

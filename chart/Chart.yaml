@@ -1,0 +1,6 @@
+apiVersion: v2
+name: registryless
+description: Containerd-backed registry with host multicast distribution
+type: application
+version: 0.1.0
+appVersion: 0.1.0

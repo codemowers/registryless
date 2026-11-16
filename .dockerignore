@@ -1,0 +1,8 @@
+.git
+.agents
+.aws
+.codex
+.build
+registryless
+skaffold.env
+chart/values.*.yaml

@@ -1,0 +1,48 @@
+image: ghcr.io/codemowers/registryless:0.1.0
+imagePullSecrets: []
+# Canonical image registry hostname, without https://.
+registryHost: ""
+containerd:
+  socket: /run/containerd/containerd.sock
+  namespace: k8s.io
+  snapshotter: ""
+httpPort: 5282
+metricsPort: 5284
+multicast:
+  # Empty selects the lowest-metric usable host IPv4 default route.
+  interface: ""
+  advertiseIP: ""
+  port: 5283
+  ttl: 1
+  # Kubernetes quantity; 10Mi means 10 MiB of payload per second.
+  bytesPerSecond: 10Mi
+maxBlobBytes: 2147483648
+unpackImages: true
+push:
+  sync: false
+  syncTimeout: 5m
+auth:
+  # rbac requires namespace or personal credentials; none permits public push/pull.
+  mode: rbac
+  # Temporary compatibility with existing namespace robot credentials.
+  legacyNamespaceCredentials: true
+oidc:
+  enabled: false
+  displayName: Registryless
+  passwordTTL: 24h
+  # Match kube-apiserver identity mapping. For sub, prefix defaults to issuer#.
+  usernameClaim: sub
+  # usernamePrefix and groupsPrefix are optional overrides.
+nodeSelector: {}
+tolerations:
+  - operator: Exists
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    memory: 512Mi
+ingress:
+  enabled: false
+  annotations: {}
+  # className and tls are supplied by the deployment or platform.

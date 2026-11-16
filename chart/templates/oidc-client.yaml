@@ -1,0 +1,24 @@
+{{- if .Values.oidc.enabled }}
+{{- if eq .Values.auth.mode "none" }}
+{{- fail "oidc.enabled must be false when auth.mode is none" }}
+{{- end }}
+apiVersion: codemowers.cloud/v1
+kind: OIDCClient
+metadata:
+  name: {{ .Release.Name }}
+  annotations:
+    kubernetes.io/description: >-
+      Sign in to Registryless to generate or reset a personal Docker credential.
+      Namespace push and read access follows the signed-in user's Kubernetes RBAC.
+spec:
+  displayName: {{ .Values.oidc.displayName | quote }}
+  applicationType: web
+  grantTypes: [authorization_code]
+  responseTypes: [code]
+  tokenEndpointAuthMethod: client_secret_basic
+  pkce: true
+  uri: https://{{ .Values.registryHost }}/
+  redirectUris:
+    - https://{{ .Values.registryHost }}/auth/callback
+  availableScopes: [openid, profile, groups]
+{{- end }}

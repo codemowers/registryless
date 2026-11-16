@@ -1,0 +1,28 @@
+apiVersion: skaffold/v3
+kind: Config
+metadata:
+  name: registryless
+build:
+  tagPolicy:
+    inputDigest: {}
+  local:
+    useBuildkit: true
+    push: true
+  artifacts:
+    - image: registryless
+      platforms:
+        - linux/amd64
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  helm:
+    releases:
+      - name: registryless
+        chartPath: chart
+        valuesFiles:
+          - chart/values.local.yaml
+        setValueTemplates:
+          image: "{{.IMAGE_FULLY_QUALIFIED_registryless}}"
+          registryHost: "{{.REGISTRYLESS_HOST}}"
+deploy:
+  kubectl: {}
